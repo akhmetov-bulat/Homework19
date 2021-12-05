@@ -12,27 +12,36 @@ class MovieDao:
         return movie
 
     def get_all(self, drctr, gnr, yr):
-        print('dao', drctr, gnr, yr)
+        from sqlalchemy import text
+        parameters_list = []
         if drctr:
-            if gnr:
-                if yr:
-                    movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
-                                                              Movie.genre_id == int(gnr),
-                                                              Movie.year == int(yr)).all()
-                else:
-                    movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
-                                                              Movie.genre_id == int(gnr)).all()
-            elif yr:
-                movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
-                                                          Movie.year == int(yr)).all()
-            else:
-                movies = self.session.query(Movie).filter(Movie.director_id == int(drctr)).all()
-        elif yr:
-            movies = self.session.query(Movie).filter(Movie.year == int(yr)).all()
-        elif gnr:
-            movies = self.session.query(Movie).filter(Movie.genre_id == int(gnr)).all()
-        else:
-            movies = self.session.query(Movie).all()
+            parameters_list.append(f"director_id == {int(drctr)}")
+        if gnr:
+            parameters_list.append(f"genre_id == {int(gnr)}")
+        if yr:
+            parameters_list.append(f"year == {int(yr)}")
+        parameters = " AND ".join(parameters_list)
+        movies = self.session.query(Movie).filter(text(f"{parameters}")).all()
+        # if drctr:
+        #     if gnr:
+        #         if yr:
+        #             movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
+        #                                                       Movie.genre_id == int(gnr),
+        #                                                       Movie.year == int(yr)).all()
+        #         else:
+        #             movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
+        #                                                       Movie.genre_id == int(gnr)).all()
+        #     elif yr:
+        #         movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
+        #                                                   Movie.year == int(yr)).all()
+        #     else:
+        #         movies = self.session.query(Movie).filter(Movie.director_id == int(drctr)).all()
+        # elif yr:
+        #     movies = self.session.query(Movie).filter(Movie.year == int(yr)).all()
+        # elif gnr:
+        #     movies = self.session.query(Movie).filter(Movie.genre_id == int(gnr)).all()
+        # else:
+        #     movies = self.session.query(Movie).all()
         return movies
 
     def create(self, movie_json):

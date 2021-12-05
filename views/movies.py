@@ -22,13 +22,12 @@ movie_ns = Namespace('movies')
 @movie_ns.route('/')
 class MovieView(Resource):
 
-    @auth_required
+    # @auth_required
     @movie_ns.expect(parser)
     def get(self):
         director_id = parser.parse_args()["director_id"]
         genre_id = parser.parse_args()["genre_id"]
         year = parser.parse_args()["year"]
-        print(parser.parse_args().keys(),parser.parse_args().values())
         # director_id = request.args.get('director_id')
         # genre_id = request.args.get('genre_id')
         # year = request.args.get('year')
