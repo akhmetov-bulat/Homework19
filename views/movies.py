@@ -22,7 +22,7 @@ movie_ns = Namespace('movies')
 @movie_ns.route('/')
 class MovieView(Resource):
 
-    # @auth_required
+    @auth_required
     @movie_ns.expect(parser)
     def get(self):
         director_id = parser.parse_args()["director_id"]
