@@ -1,5 +1,3 @@
-from dao.model.movie import Movie
-
 
 class MovieService:
     def __init__(self, movie_dao):
@@ -11,8 +9,8 @@ class MovieService:
     def get_one(self, mid):
         return self.movie_dao.get_one(mid)
 
-    def get_all(self):
-        return self.movie_dao.get_all()
+    def get_all(self,drctr, gnr, yr):
+        return self.movie_dao.get_all(drctr = drctr, gnr = gnr, yr = yr)
 
     def create(self, movie_json):
         movie = self.movie_dao.create(movie_json)

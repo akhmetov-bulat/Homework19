@@ -11,23 +11,13 @@ class Movie(db.Model):
     description = db.Column(db.String(400))
     trailer = db.Column(db.String(100))
     year = db.Column(db.Integer)
-    rating = db.Column(db.String(10))
-    # genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
-    # director_id = db.Column(db.Integer, db.ForeignKey('directors.id'))
-    genre_id = db.Column(db.Integer)
-    director_id = db.Column(db.Integer)
+    rating = db.Column(db.Float)
+    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
+    director_id = db.Column(db.Integer, db.ForeignKey('directors.id'))
+    genre = db.relationship('Genre')
+    director = db.relationship('Director')
 
-    def to_json(self):
-        json_data = {"id": self.id,
-                     "title": self.title,
-                     "description": self.description,
-                     "trailer": self.trailer,
-                     "year": self.year,
-                     "rating": self.rating,
-                     "genre_id": self.genre_id,
-                     "director_id": self.director_id
-                     }
-        return json_data
+
 
 
 class MovieSchema(Schema):
@@ -36,6 +26,6 @@ class MovieSchema(Schema):
     description = fields.Str()
     trailer = fields.Str()
     year = fields.Int()
-    rating = fields.Str()
+    rating = fields.Float()
     genre_id = fields.Int()
     director_id = fields.Int()

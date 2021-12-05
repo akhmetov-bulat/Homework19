@@ -1,4 +1,6 @@
-from dao.model.movie import Movie
+from dao.model.movie import Movie, MovieSchema
+
+movies_schema = MovieSchema(many=True)
 
 
 class MovieDao:
@@ -7,34 +9,48 @@ class MovieDao:
 
     def get_one(self, mid):
         movie = self.session.query(Movie).get(mid)
-        if movie:
-            return movie.to_json()
-        return False
+        return movie
 
-    def get_all(self):
-        movies = []
-        for movie in self.session.query(Movie).all():
-            movies.append(movie)
-        if movies:
-            return movies
-        return False
+    def get_all(self, drctr, gnr, yr):
+        print('dao', drctr, gnr, yr)
+        if drctr:
+            if gnr:
+                if yr:
+                    movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
+                                                              Movie.genre_id == int(gnr),
+                                                              Movie.year == int(yr)).all()
+                else:
+                    movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
+                                                              Movie.genre_id == int(gnr)).all()
+            elif yr:
+                movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
+                                                          Movie.year == int(yr)).all()
+            else:
+                movies = self.session.query(Movie).filter(Movie.director_id == int(drctr)).all()
+        elif yr:
+            movies = self.session.query(Movie).filter(Movie.year == int(yr)).all()
+        elif gnr:
+            movies = self.session.query(Movie).filter(Movie.genre_id == int(gnr)).all()
+        else:
+            movies = self.session.query(Movie).all()
+        return movies
 
     def create(self, movie_json):
         try:
             new_movie = Movie(**movie_json)
             self.session.add(new_movie)
             self.session.commit()
-            return new_movie.to_json()
+            return new_movie
         except:
-            return False
+            pass
 
     def update(self, mid, movie_json):
         try:
             self.session.query(Movie).filter(Movie.id == mid).update(movie_json)
             self.session.commit()
-            return 'True'
-        except Exception as e:
-            return e
+            return True
+        except:
+            return False
 
 
     def delete(self, mid):
