@@ -13,36 +13,18 @@ class MovieDao:
         movie = self.session.query(Movie).get(mid)
         return movie
 
-    def get_all(self, drctr, gnr, yr):
-        parameters_list = []
-        if drctr:
-            parameters_list.append(f"director_id == {int(drctr)}")
-        if gnr:
-            parameters_list.append(f"genre_id == {int(gnr)}")
-        if yr:
-            parameters_list.append(f"year == {int(yr)}")
-        parameters = " AND ".join(parameters_list)
-        movies = self.session.query(Movie).filter(text(f"{parameters}")).all()
-        # if drctr:
-        #     if gnr:
-        #         if yr:
-        #             movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
-        #                                                       Movie.genre_id == int(gnr),
-        #                                                       Movie.year == int(yr)).all()
-        #         else:
-        #             movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
-        #                                                       Movie.genre_id == int(gnr)).all()
-        #     elif yr:
-        #         movies = self.session.query(Movie).filter(Movie.director_id == int(drctr),
-        #                                                   Movie.year == int(yr)).all()
-        #     else:
-        #         movies = self.session.query(Movie).filter(Movie.director_id == int(drctr)).all()
-        # elif yr:
-        #     movies = self.session.query(Movie).filter(Movie.year == int(yr)).all()
-        # elif gnr:
-        #     movies = self.session.query(Movie).filter(Movie.genre_id == int(gnr)).all()
-        # else:
-        #     movies = self.session.query(Movie).all()
+    def get_all(self, director_id, genre_id, year):
+        params = {}
+        if director_id:
+            params['director_id'] = director_id
+        if genre_id:
+            params['genre_id'] = genre_id
+        if year:
+            params['year'] = year
+        if params:
+            movies = self.session.query(Movie).filter_by(**params).all()
+        else:
+            movies = self.session.query(Movie).all()
         return movies
 
     def create(self, movie_json):

@@ -9,8 +9,8 @@ class MovieService:
     def get_one(self, mid):
         return self.movie_dao.get_one(mid)
 
-    def get_all(self,drctr, gnr, yr):
-        return self.movie_dao.get_all(drctr = drctr, gnr = gnr, yr = yr)
+    def get_all(self,director_id, genre_id, year):
+        return self.movie_dao.get_all(director_id=director_id, genre_id=genre_id, year=year)
 
     def create(self, movie_json):
         movie = self.movie_dao.create(movie_json)

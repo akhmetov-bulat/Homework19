@@ -31,7 +31,7 @@ class MovieView(Resource):
         # director_id = request.args.get('director_id')
         # genre_id = request.args.get('genre_id')
         # year = request.args.get('year')
-        movies = movie_service.get_all(drctr=director_id, gnr=genre_id, yr=year)
+        movies = movie_service.get_all(director_id=director_id, genre_id=genre_id, year=year)
         if movies:
             return movies_schema.dump(movies), 200
         return "", 404
