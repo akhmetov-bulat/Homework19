@@ -14,13 +14,13 @@ class UserDao:
         user = self.session.query(User).filter(User.username == username).first()
         if user:
             return user
-        return False
+        return None
 
     def get_one(self, uid):
         user = self.session.query(User).get(uid)
         if user:
             return user
-        return False
+        return None
 
     def get_all(self):
         users = []
@@ -28,7 +28,7 @@ class UserDao:
             users.append(user)
         if users:
             return users
-        return False
+        return None
 
     def create(self, user_json):
         try:
@@ -37,7 +37,7 @@ class UserDao:
             self.session.commit()
             return new_user
         except:
-            return False
+            return None
 
     def update(self, user_json):
         try:

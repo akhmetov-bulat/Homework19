@@ -1,4 +1,6 @@
 from service.utils import hash_password, create_token, compare_password
+import jwt
+from constants import SECRET, algo
 
 
 class AuthService:
@@ -10,7 +12,7 @@ class AuthService:
         if user is None:
             return None
         if compare_password(password, user.password, user.salt):
-            data = {
+            data = {"id":user.id,
                     "username": user.username,
                     "role": user.role
                     }
@@ -18,8 +20,6 @@ class AuthService:
             return tokens
 
     def auth_refresh_token(self, refresh_token):
-        import jwt
-        from constants import SECRET, algo
 
         try:
             token_data = jwt.decode(jwt=refresh_token, key=SECRET, algorithms=[algo])

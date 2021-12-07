@@ -2,8 +2,6 @@ from flask_restx import Namespace, Resource, abort
 from implemented import auth_service
 from flask import request
 
-from views.helpers import auth_required
-
 auth_ns = Namespace('auth')
 
 

@@ -1,5 +1,7 @@
 from dao.model.movie import Movie, MovieSchema
+from sqlalchemy import text
 
+movie_schema = MovieSchema()
 movies_schema = MovieSchema(many=True)
 
 
@@ -12,7 +14,6 @@ class MovieDao:
         return movie
 
     def get_all(self, drctr, gnr, yr):
-        from sqlalchemy import text
         parameters_list = []
         if drctr:
             parameters_list.append(f"director_id == {int(drctr)}")

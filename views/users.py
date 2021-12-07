@@ -3,7 +3,7 @@ from flask_restx import Resource, Namespace
 from implemented import user_service
 from flask import request
 
-from views.helpers import admin_required
+from views.helpers import admin_required, self_required, auth_required
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
@@ -13,11 +13,13 @@ user_ns = Namespace('users')
 
 @user_ns.route('/')
 class UserView(Resource):
+
     def get(self):
         users = user_service.get_all()
         if users:
             return users_schema.dump(users), 200
         return 'not found', 404
+
 
     def post(self):
         username = request.json.get("username")
@@ -32,13 +34,15 @@ class UserView(Resource):
 
 @user_ns.route('/<int:uid>')
 class UserViewGid(Resource):
+
+    @self_required
     def get(self, uid):
         users = user_service.get_one(uid)
         if users:
             return user_schema.dump(users), 200
         return "not found", 404
 
-
+    @self_required
     def put(self, uid):
         user_json = request.json
         if "salt" not in user_json.keys():
@@ -52,7 +56,7 @@ class UserViewGid(Resource):
             return "wrong data", 400
         return "keys not equals", 400
 
-
+    @self_required
     def patch(self, uid):
         users_json = request.json
         try:

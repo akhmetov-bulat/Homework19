@@ -10,13 +10,6 @@ class Genre(db.Model):
     name = db.Column(db.String(50))
 
 
-    def to_json(self):
-        json_data = {"id": self.id,
-                     "name": self.name,
-                     }
-        return json_data
-
-
 class GenreSchema(Schema):
     id = fields.Int(dump_only=True)
     name = fields.Str()
